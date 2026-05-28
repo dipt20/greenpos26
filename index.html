@@ -96,7 +96,7 @@
                             <table class="w-full text-left text-sm text-gray-600">
                                 <thead>
                                     <tr class="border-b border-gray-100 text-gray-400 uppercase text-xs">
-                                        <th class="py-3 pl-2 text-left">پণ্য</th>
+                                        <th class="py-3 pl-2 text-left">পণ্য</th>
                                         <th class="py-3 text-center">মূল্য</th>
                                         <th class="py-3 text-center">পরিমাণ</th>
                                         <th class="py-3 text-right pr-2">মোট</th>
@@ -140,8 +140,8 @@
     </div>
 
     <script>
-        // আপনার গুগল অ্যাপস স্ক্রিপ্ট ওয়েব ইউআরএলটি এখানে বসান
-        // var googleScriptURL = 'আপনার_ওয়েব_অ্যাপ_ইউআরএল'; 
+        // 📢 আপনার গুগল অ্যাপস স্ক্রিপ্ট URL এখানে সফলভাবে যুক্ত করা হয়েছে
+        var googleScriptURL = 'https://script.google.com/macros/s/AKfycbzXPf9Tk6iYgCVRKxPKpAKlCjdEe5pmU-CYksCWAIOSbt1aJmEF55Mxyd3APm_Sb6LzjA/exec'; 
 
         let cart = [];
 
@@ -367,12 +367,6 @@
 
         // 🚀 گوگل শিটে ডেটা পাঠানোর ফাংশন
         function submitToGoogleSheet() {
-            // সতর্কবার্তা: প্রথমে গুগল অ্যাপস স্ক্রিপ্ট সেটআপ করতে হবে
-            if (typeof googleScriptURL === 'undefined' || googleScriptURL === 'আপনার_ওয়েব_অ্যাপ_ইউআরএল' || googleScriptURL === '') {
-                alert("দুঃখিত! গুগল শিট সাবমিশন সেটআপ করা নেই। দয়া করে কোডের শুরুতে `googleScriptURL` ভেরিয়েবলে আপনার Apps Script URL টি বসান।");
-                return;
-            }
-
             if (cart.length === 0) {
                 alert("কার্ট খালি! সাবমিট করার জন্য পণ্য যোগ করুন।");
                 return;
@@ -402,7 +396,7 @@
             // Fetch API এর মাধ্যমে রিকোয়েস্ট পাঠানো
             fetch(googleScriptURL, {
                 method: 'POST',
-                mode: 'no-cors', // CORS ইস্যু এড়াতে
+                mode: 'no-cors', 
                 cache: 'no-cache',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
