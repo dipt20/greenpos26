@@ -4,37 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Green Cart Shop - POS System</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-        /* প্রিন্ট লেআউট ফিক্স এবং মিনি বিল ডিজাইন */
-        @media print {
-            body * { 
-                visibility: hidden; 
-                background: transparent !important;
-            }
-            #miniPrintReceipt, #miniPrintReceipt * { 
-                visibility: visible; 
-            }
-            #miniPrintReceipt { 
-                position: absolute; 
-                left: 0; 
-                top: 0; 
-                width: 80mm; /* স্ট্যান্ডার্ড থার্মাল পেপার সাইজ */
-                padding: 5mm;
-                font-family: monospace;
-                color: #000 !important;
-            }
-            .no-print { 
-                display: none !important; 
-            }
-        }
-    </style>
 </head>
 <body class="bg-gray-50 font-sans min-h-screen text-gray-800">
 
-    <div class="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 no-print">
-        <!-- Header -->
+    <div class="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
         <header class="bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-gray-100 mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="text-center sm:text-left">
                 <h1 class="text-xl sm:text-2xl font-bold text-emerald-600 tracking-wide">গ্রীণ কার্ট শপ</h1>
@@ -46,7 +20,6 @@
             </div>
         </header>
 
-        <!-- Mobile Navigation Tabs -->
         <div class="flex bg-gray-200 p-1 rounded-xl mb-4 lg:hidden">
             <button id="tabFormBtn" onclick="switchTab('form')" class="w-1/2 text-center py-2 text-sm font-medium rounded-lg bg-white text-emerald-600 shadow-xs cursor-pointer">
                 পণ্য ও ক্রেতা ইনপুট
@@ -57,12 +30,9 @@
             </button>
         </div>
 
-        <!-- Main Content Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             
-            <!-- Left Side: Input Form -->
             <div id="leftInputArea" class="lg:col-span-1 space-y-4 sm:space-y-6 block lg:block">
-                <!-- Customer Section -->
                 <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-xs border border-gray-100">
                     <h2 class="text-base sm:text-lg font-semibold text-gray-700 mb-3 sm:mb-4 border-b pb-2 border-gray-100">ক্রেতার তথ্য (ঐচ্ছিক)</h2>
                     <div class="space-y-3">
@@ -81,7 +51,6 @@
                     </div>
                 </div>
 
-                <!-- Product Add Section -->
                 <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-xs border border-gray-100">
                     <h2 class="text-base sm:text-lg font-semibold text-gray-700 mb-3 sm:mb-4 border-b pb-2 border-gray-100">পণ্য যুক্ত করুন</h2>
                     <form id="productForm" class="space-y-3">
@@ -107,7 +76,6 @@
                 </div>
             </div>
 
-            <!-- Right Side: Live View Area -->
             <div id="liveCartArea" class="lg:col-span-2 bg-white p-4 sm:p-6 rounded-2xl shadow-xs border border-gray-100 flex flex-col justify-between hidden lg:flex">
                 <div>
                     <h2 class="text-base sm:text-lg font-bold text-gray-700 mb-4 border-b pb-2 border-gray-100">সব পণ্যের তালিকা (লাইভ মেমো)</h2>
@@ -124,13 +92,11 @@
                                 </tr>
                             </thead>
                             <tbody id="cartTableBody" class="divide-y divide-gray-50">
-                                <!-- Cart Items -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Calculation Section -->
                 <div class="mt-6 border-t border-gray-100 pt-4 space-y-3">
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">সাব-টোটাল:</span>
@@ -145,16 +111,12 @@
                         <span>৳<span id="grandTotal">0.00</span></span>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 pt-4">
-                        <button onclick="clearPOS()" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 font-medium py-2.5 rounded-xl text-xs sm:text-sm transition duration-200 cursor-pointer order-3 sm:order-1">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
+                        <button onclick="clearPOS()" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 font-medium py-3 rounded-xl text-sm transition duration-200 cursor-pointer text-center">
                             সব ক্লিয়ার করুন
                         </button>
-                        <button onclick="submitToTextFile()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 rounded-xl text-xs sm:text-sm transition duration-200 cursor-pointer order-2 sm:order-2">
-                            ফাইলে জমা (TXT)
-                        </button>
-                        <button onclick="printInvoice()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs sm:text-sm transition duration-200 shadow-sm cursor-pointer order-1 sm:order-3">
-                            প্রিন্ট বিল
+                        <button onclick="submitToGoogleSheet()" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-sm transition duration-200 shadow-sm cursor-pointer text-center">
+                            সাবমিট করুন
                         </button>
                     </div>
                 </div>
@@ -162,55 +124,10 @@
         </div>
     </div>
 
-    <!-- HELD IN BACKGROUND: EXCLUSIVE MINI PRINT RECEIPT (Only visible during printing) -->
-    <div id="miniPrintReceipt" class="hidden">
-        <div style="text-align: center; border-bottom: 1px dashed #000; padding-bottom: 8px; margin-bottom: 8px;">
-            <h2 style="font-size: 18px; font-weight: bold; margin: 0;">গ্রীণ কার্ট শপ</h2>
-            <p style="font-size: 12px; margin: 2px 0;">মোবাইল: ০১৬২৩-৬৭৭-৬৮৭</p>
-        </div>
-        
-        <div style="font-size: 11px; line-height: 1.4; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 6px;">
-            <div><strong>ইনভয়েস:</strong> <span id="printInvNo"></span></div>
-            <div><strong>তারিখ:</strong> <span id="printInvTime"></span></div>
-            <div id="printCustDetails"></div>
-        </div>
-
-        <table style="width: 100%; font-size: 11px; text-align: left; border-collapse: collapse;">
-            <thead>
-                <tr style="border-bottom: 1px solid #000;">
-                    <th style="padding: 4px 0;">পণ্য</th>
-                    <th style="text-align: center;">মূল্য</th>
-                    <th style="text-align: center;">পরিমাণ</th>
-                    <th style="text-align: right;">মোট</th>
-                </tr>
-            </thead>
-            <tbody id="printCartItems">
-                <!-- Dynamic Items -->
-            </tbody>
-        </table>
-
-        <div style="border-top: 1px dashed #000; margin-top: 6px; padding-top: 6px; font-size: 12px; line-height: 1.5;">
-            <div style="display: flex; justify-content: space-between;">
-                <span>সাব-টোটাল:</span>
-                <span>৳<span id="printSubTotal">0.00</span></span>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-                <span>ডিসকাউন্ট:</span>
-                <span>৳<span id="printDiscountAmt">0.00</span></span>
-            </div>
-            <div style="display: flex; justify-content: space-between; font-weight: bold; border-top: 1px solid #000; margin-top: 4px; padding-top: 4px; font-size: 13px;">
-                <span>সর্বমোট:</span>
-                <span>৳<span id="printGrandTotal">0.00</span></span>
-            </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 15px; font-size: 11px; border-top: 1px dashed #000; padding-top: 8px;">
-            ধন্যবাদ, আবার আসবেন!
-        </div>
-    </div>
-
-    <!-- Operations Logic Script -->
     <script>
+        // 📢 আপনার গুগল অ্যাপস স্ক্রিপ্ট URL এখানে সফলভাবে যুক্ত করা হয়েছে
+        var googleScriptURL = 'https://script.google.com/macros/s/AKfycbzXPf9Tk6iYgCVRKxPKpAKlCjdEe5pmU-CYksCWAIOSbt1aJmEF55Mxyd3APm_Sb6LzjA/exec'; 
+
         let cart = [];
 
         window.onload = function() {
@@ -371,102 +288,79 @@
 
         function clearPOS() {
             if(confirm("সতর্কতা! আপনি কি নিশ্চিতভাবে সম্পূর্ণ কার্ট এবং ক্রেতার তথ্য মুছে ফেলতে চান?")) {
-                cart = [];
-                document.getElementById('productForm').reset();
-                document.getElementById('custName').value = '';
-                document.getElementById('custPhone').value = '';
-                document.getElementById('custAddress').value = '';
-                document.getElementById('discountInput').value = 0;
-                document.getElementById('editIndex').value = "-1";
-                document.getElementById('addBtn').innerText = "পণ্য যুক্ত করুন";
-                document.getElementById('addBtn').className = "w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg text-sm transition duration-200 shadow-xs cursor-pointer";
-                
-                localStorage.clear();
-                generateNewInvoice();
-                updateCartTable();
-                
-                if (window.innerWidth < 1024) {
-                    switchTab('form');
-                }
+                forceClear();
             }
         }
 
-        function submitToTextFile() {
-            if (cart.length === 0) {
-                alert("কার্ট খালি! কোনো পণ্য ছাড়া ফাইল তৈরি করা যাবে না।");
-                return;
+        function forceClear() {
+            cart = [];
+            document.getElementById('productForm').reset();
+            document.getElementById('custName').value = '';
+            document.getElementById('custPhone').value = '';
+            document.getElementById('custAddress').value = '';
+            document.getElementById('discountInput').value = 0;
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('addBtn').innerText = "পণ্য যুক্ত করুন";
+            document.getElementById('addBtn').className = "w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg text-sm transition duration-200 shadow-xs cursor-pointer";
+            
+            localStorage.clear();
+            generateNewInvoice();
+            updateCartTable();
+            
+            if (window.innerWidth < 1024) {
+                switchTab('form');
             }
-
-            const invNo = localStorage.getItem('invoiceNo');
-            const invTime = localStorage.getItem('invoiceTime');
-            const name = document.getElementById('custName').value || 'N/A';
-            const phone = document.getElementById('custPhone').value || 'N/A';
-            const address = document.getElementById('custAddress').value || 'N/A';
-            
-            let textData = `====================================\n   গ্রীণ কার্ট শপ - ০১৬২৩-৬৭৭-৬৮৭\n====================================\n`;
-            textData += `ইনভয়েস নং: ${invNo}\nতারিখ ও সময়: ${invTime}\n------------------------------------\n`;
-            textData += `ক্রেতা: ${name} | ফোন: ${phone}\nঠিকানা: ${address}\n------------------------------------\n`;
-            
-            cart.forEach((item, idx) => {
-                textData += `${idx+1}. ${item.name} [${item.qty} Qty] = ৳${(item.qty*item.price).toFixed(2)}\n`;
-            });
-            
-            textData += `------------------------------------\n`;
-            textData += `সাব-টোটাল: ৳${document.getElementById('subTotal').innerText}\n`;
-            textData += `ডিসকাউন্ট: ৳${(parseFloat(document.getElementById('discountInput').value) || 0).toFixed(2)}\n`;
-            textData += `সর্বমোট মূল্য: ৳${document.getElementById('grandTotal').innerText}\n====================================\n`;
-
-            const blob = new Blob([textData], { type: 'text/plain;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `${invNo}_bill.txt`;
-            link.click();
         }
 
-        // ৯. থার্মাল প্রিন্ট ফিক্সড লজিক
-        function printInvoice() {
+        // 🚀 গুগল শিটে ডেটা পাঠানোর ফাংশন
+        function submitToGoogleSheet() {
             if (cart.length === 0) {
-                alert("কার্ট খালি! প্রিন্ট করার জন্য পণ্য যোগ করুন।");
+                alert("কার্ট খালি! সাবমিট করার জন্য পণ্য যোগ করুন।");
                 return;
             }
 
-            // ১. প্রিন্ট মেমোতে ইনভয়েস ডাটা সিঙ্ক করা
-            document.getElementById('printInvNo').innerText = document.getElementById('invoiceNo').innerText;
-            document.getElementById('printInvTime').innerText = document.getElementById('invoiceTime').innerText;
-            
-            // ২. কাস্টমার ডাটা সিঙ্ক করা
-            const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            const address = document.getElementById('custAddress').value;
-            
-            let custHtml = '';
-            if(name) custHtml += `<div><strong>নাম:</strong> ${name}</div>`;
-            if(phone) custHtml += `<div><strong>ফোন:</strong> ${phone}</div>`;
-            if(address) custHtml += `<div><strong>ঠিকানা:</strong> ${address}</div>`;
-            document.getElementById('printCustDetails').innerHTML = custHtml;
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "ডাটা পাঠানো হচ্ছে...";
+            submitBtn.className = "w-full bg-gray-400 text-white font-bold py-3 rounded-xl text-sm cursor-not-allowed text-center";
 
-            // ৩. আইটেম টেবিল রেন্ডারিং করা
-            const printTbody = document.getElementById('printCartItems');
-            printTbody.innerHTML = '';
-            cart.forEach(item => {
-                printTbody.innerHTML += `
-                    <tr style="border-bottom: 1px dashed #eee;">
-                        <td style="padding: 4px 0; max-width: 100px; word-break: break-all;">${item.name}</td>
-                        <td style="text-align: center;">${item.price.toFixed(0)}</td>
-                        <td style="text-align: center;">${item.qty}</td>
-                        <td style="text-align: right;">${(item.price * item.qty).toFixed(0)}</td>
-                    </tr>
-                `;
+            // সব পণ্য এক লাইনে স্ট্রিং আকারে সাজানো
+            let productListString = cart.map((item, idx) => `${idx+1}. ${item.name} (${item.qty}টি x ৳${item.price})`).join(' | ');
+
+            // পেলোড তৈরি করা
+            const payload = {
+                invoice: document.getElementById('invoiceNo').innerText,
+                datetime: document.getElementById('invoiceTime').innerText,
+                name: document.getElementById('custName').value || 'N/A',
+                phone: document.getElementById('custPhone').value || 'N/A',
+                address: document.getElementById('custAddress').value || 'N/A',
+                products: productListString,
+                subtotal: document.getElementById('subTotal').innerText,
+                discount: (parseFloat(document.getElementById('discountInput').value) || 0).toFixed(2),
+                grandtotal: document.getElementById('grandTotal').innerText
+            };
+
+            // Fetch API এর মাধ্যমে রিকোয়েস্ট পাঠানো
+            fetch(googleScriptURL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                alert("✅ চমৎকার! ডাটা সফলভাবে গুগল শিটে জমা হয়েছে।");
+                forceClear(); // সাবমিট সফল হলে ফর্ম ও মেমো অটো ক্লিয়ার হবে
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("❌ দুঃখিত! ডাটা পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "সাবমিট করুন";
+                submitBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-sm transition duration-200 shadow-sm cursor-pointer text-center";
             });
-
-            // ৪. ফাইনাল ক্যালকুলেশন সিঙ্ক
-            const disc = parseFloat(document.getElementById('discountInput').value) || 0;
-            document.getElementById('printSubTotal').innerText = document.getElementById('subTotal').innerText;
-            document.getElementById('printDiscountAmt').innerText = disc.toFixed(2);
-            document.getElementById('printGrandTotal').innerText = document.getElementById('grandTotal').innerText;
-
-            // ৫. উইন্ডো থ্রু প্রিন্ট এক্সেকিউশন
-            window.print();
         }
     </script>
 </body>
