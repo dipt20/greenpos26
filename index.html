@@ -33,7 +33,6 @@
 
         <!-- 1. DASHBOARD TAB -->
         <div id="tab-dashboard" class="tab-content space-y-6">
-            <!-- 3. Opening & Closing Cash Section -->
             <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-100 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-3 w-full md:w-auto">
                     <div class="p-3 bg-emerald-100 text-emerald-700 rounded-lg"><i class="fa-solid fa-vault text-xl"></i></div>
@@ -73,7 +72,6 @@
                 </div>
             </div>
 
-            <!-- Low Stock Alert Warning Box -->
             <div id="low-stock-alert-box" class="bg-amber-50 border border-amber-200 rounded-xl p-4 hidden">
                 <h4 class="font-bold text-amber-800 text-sm mb-2 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> লো স্টক সতর্কবার্তা (Stock Out Warning)</h4>
                 <div id="low-stock-list" class="flex flex-wrap gap-2 text-xs"></div>
@@ -93,6 +91,14 @@
                     </div>
                 </div>
 
+                <!-- Category Filter Buttons -->
+                <div class="bg-white p-3 rounded-xl shadow-sm space-y-2">
+                    <p class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-tags"></i> ক্যাটেগরি ফিল্টার:</p>
+                    <div id="pos-category-filters" class="flex gap-2 overflow-x-auto pb-1 text-xs">
+                        <!-- Dynamic Categories -->
+                    </div>
+                </div>
+
                 <div class="bg-white p-4 rounded-xl shadow-sm">
                     <h3 class="font-bold text-sm text-slate-700 mb-3">উপলব্ধ পণ্যসমূহ</h3>
                     <div id="pos-product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[450px] overflow-y-auto"></div>
@@ -109,7 +115,6 @@
                 <div class="space-y-3 border-t pt-3 text-sm">
                     <div class="flex justify-between"><span>পণ্যের মোট দাম:</span> <span id="cart-subtotal" class="font-semibold">৳0</span></div>
                     
-                    <!-- 1. Discount field with no default value -->
                     <div class="flex justify-between items-center">
                         <span>ছাড় (Discount):</span>
                         <input type="number" id="cart-discount" placeholder="ছাড়ের পরিমাণ" class="w-24 px-2 py-1 border rounded text-right text-sm" oninput="updateCartCalculations()">
@@ -126,7 +131,6 @@
                             <option value="ডিজিটাল">ডিজিটাল (bKash/Nagad)</option>
                             <option value="বাকি">বাকি (Credit)</option>
                         </select>
-                        <!-- 2. Customer Paid & Return Details -->
                         <input type="number" id="paid-amount" placeholder="কত টাকা দিলো" class="w-full px-2 py-1 border rounded text-xs" oninput="calculateChange()">
                     </div>
                     
@@ -144,13 +148,14 @@
         <div id="tab-products" class="tab-content hidden space-y-4">
             <div class="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center">
                 <h3 class="font-bold text-slate-700"><i class="fa-solid fa-boxes-stacked"></i> পণ্য ও স্টক তালিকা</h3>
-                <button onclick="openProductModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold"><i class="fa-solid fa-plus"></i> নতুন পণ্য ম্যানুয়ালি / বারকোডে যোগ করুন</button>
+                <button onclick="openProductModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold"><i class="fa-solid fa-plus"></i> নতুন পণ্য যোগ করুন</button>
             </div>
             <div class="bg-white p-4 rounded-xl shadow-sm overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
                         <tr class="border-b bg-slate-50 text-slate-600">
                             <th class="p-2">বারকোড</th>
+                            <th class="p-2">ক্যাটেগরি</th>
                             <th class="p-2">পণ্যের নাম</th>
                             <th class="p-2">ক্রয় মূল্য</th>
                             <th class="p-2">বিক্রয় মূল্য</th>
@@ -166,7 +171,7 @@
         <!-- 4. SALES HISTORY TAB -->
         <div id="tab-sales" class="tab-content hidden space-y-4">
             <div class="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center">
-                <h3 class="font-bold text-slate-700"><i class="fa-solid fa-receipt"></i> বিক্রয় রেকর্ড (মেমো তে ক্লিক করলে বিস্তারিত দেখাবে)</h3>
+                <h3 class="font-bold text-slate-700"><i class="fa-solid fa-receipt"></i> বিক্রয় রেকর্ড</h3>
             </div>
             <div class="bg-white p-4 rounded-xl shadow-sm overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs">
@@ -199,7 +204,7 @@
 
                 <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
                     <h4 class="font-bold text-blue-800 text-sm">এক্সেল থেকে আপলোড (Import Products)</h4>
-                    <p class="text-xs text-slate-600">আপনার এক্সেল ফাইলে <strong>barcode, name, buyPrice, sellPrice, stock</strong> কলাম থাকতে হবে।</p>
+                    <p class="text-xs text-slate-600">আপনার এক্সেল ফাইলে <strong>barcode, category, name, buyPrice, sellPrice, stock</strong> কলাম থাকতে হবে।</p>
                     <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-blue-600 file:text-white" onchange="importDataFromExcel(event)">
                 </div>
             </div>
@@ -216,18 +221,23 @@
         </div>
     </div>
 
-    <!-- Modal: Add/Edit Product (4. Support Barcode Scan during Purchase/Entry) -->
+    <!-- Modal: Add/Edit Product -->
     <div id="product-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-xl max-w-md w-full p-5 space-y-3">
-            <h3 id="modal-title" class="font-bold text-slate-700">পণ্য ক্রয় ও তথ্য যোগ/এডিট</h3>
+            <h3 id="modal-title" class="font-bold text-slate-700">পণ্য তথ্য যোগ/এডিট</h3>
             <input type="hidden" id="edit-product-id">
             <div class="space-y-2 text-xs">
                 <div>
                     <label class="font-semibold">বারকোড (স্ক্যানার বা ম্যানুয়াল)</label>
                     <div class="flex gap-1 mt-1">
                         <input type="text" id="prod-barcode" placeholder="বারকোড স্ক্যান বা লিখুন..." class="w-full px-2 py-1.5 border rounded" onkeyup="handleModalBarcodeSearch(event)">
-                        <button type="button" onclick="startCameraScanner('modal')" class="bg-slate-200 px-3 py-1 rounded text-xs" title="ক্যামেরা স্ক্যান"><i class="fa-solid fa-camera"></i></button>
+                        <button type="button" onclick="startCameraScanner('modal')" class="bg-slate-200 px-3 py-1 rounded text-xs"><i class="fa-solid fa-camera"></i></button>
                     </div>
+                </div>
+                <div>
+                    <label class="font-semibold">ক্যাটেগরি</label>
+                    <input type="text" id="prod-category" placeholder="যেমন: চাল, ডাল, তেল, ডিম, ইত্যাদি" class="w-full px-2 py-1.5 border rounded mt-1" list="category-options">
+                    <datalist id="category-options"></datalist>
                 </div>
                 <div><label class="font-semibold">পণ্যের নাম</label><input type="text" id="prod-name" placeholder="পণ্যের নাম" class="w-full px-2 py-1.5 border rounded mt-1"></div>
                 <div class="grid grid-cols-2 gap-2">
@@ -277,11 +287,13 @@
     <!-- Application Script -->
     <script>
         let products = JSON.parse(localStorage.getItem('pos_adv_products')) || [
-            { id: '1', barcode: '1001', name: 'মিনিকেট চাল (১ কেজি)', buyPrice: 65, sellPrice: 72, stock: 50 },
-            { id: '2', barcode: '1002', name: 'মসুর ডাল (১ কেজি)', buyPrice: 130, sellPrice: 145, stock: 4 }
+            { id: '1', barcode: '1001', category: 'চাল', name: 'মিনিকেট চাল (১ কেজি)', buyPrice: 65, sellPrice: 72, stock: 50 },
+            { id: '2', barcode: '1002', category: 'ডাল', name: 'মসুর ডাল (১ কেজি)', buyPrice: 130, sellPrice: 145, stock: 4 },
+            { id: '3', barcode: '1003', category: 'ডিম', name: 'ফার্মের ডিম (হালি)', buyPrice: 48, sellPrice: 55, stock: 100 }
         ];
         let salesHistory = JSON.parse(localStorage.getItem('pos_adv_sales')) || [];
         let openingCash = parseFloat(localStorage.getItem('pos_opening_cash')) || 0;
+        let selectedCategory = 'all';
         let cart = [];
         let html5QrcodeScanner = null;
         let scanTarget = 'pos';
@@ -310,7 +322,6 @@
             if(tabId === 'sales') renderSalesHistory();
         }
 
-        // 3. Dashboard & Opening/Closing Cash Calculation
         function renderDashboard() {
             document.getElementById('opening-cash-input').value = openingCash > 0 ? openingCash : '';
             const todayStr = new Date().toLocaleDateString('bn-BD');
@@ -318,18 +329,13 @@
             
             const totalSalesAmt = todaySales.reduce((sum, s) => sum + s.grandTotal, 0);
             const totalDue = salesHistory.reduce((sum, s) => sum + s.due, 0);
-            
-            // Cash payment sum for cash box calculation
             const todayCashSales = todaySales.filter(s => s.method === 'নগদ').reduce((sum, s) => sum + s.paid, 0);
             const closingCash = openingCash + todayCashSales;
             document.getElementById('dash-closing-cash').innerText = '৳' + closingCash;
 
-            // Profit calculation
             let todayProfit = 0;
             todaySales.forEach(s => {
-                s.items.forEach(i => {
-                    todayProfit += ((i.sellPrice - i.buyPrice) * i.qty);
-                });
+                s.items.forEach(i => { todayProfit += ((i.sellPrice - i.buyPrice) * i.qty); });
                 todayProfit -= s.discount;
             });
 
@@ -350,7 +356,6 @@
             }
         }
 
-        // Camera Barcode Scanner
         function startCameraScanner(target) {
             scanTarget = target;
             document.getElementById('camera-modal').classList.remove('hidden');
@@ -380,16 +385,30 @@
             }
         }
 
-        // POS Logic
+        // Render POS Categories & Filtered Products
         function renderPosProducts() {
+            renderCategoryButtons();
+
             const grid = document.getElementById('pos-product-grid');
             const search = document.getElementById('pos-search-input').value.toLowerCase();
             grid.innerHTML = '';
             
-            products.filter(p => p.name.toLowerCase().includes(search) || p.barcode.includes(search)).forEach(p => {
+            let filtered = products.filter(p => p.name.toLowerCase().includes(search) || p.barcode.includes(search));
+
+            if(selectedCategory !== 'all') {
+                filtered = filtered.filter(p => (p.category || 'সাধারণ') === selectedCategory);
+            }
+
+            if(filtered.length === 0) {
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-4 text-xs">কোনো পণ্য পাওয়া যায়নি</p>';
+                return;
+            }
+
+            filtered.forEach(p => {
                 grid.innerHTML += `
                     <div onclick="addToCart('${p.id}')" class="bg-slate-50 border p-2.5 rounded-lg cursor-pointer hover:bg-emerald-50 transition">
-                        <p class="font-semibold text-xs text-slate-700 truncate">${p.name}</p>
+                        <span class="text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-medium">${p.category || 'সাধারণ'}</span>
+                        <p class="font-semibold text-xs text-slate-700 truncate mt-1">${p.name}</p>
                         <p class="text-[10px] text-slate-400">কোড: ${p.barcode}</p>
                         <div class="mt-2 flex justify-between items-center text-xs">
                             <span class="font-bold text-emerald-600">৳${p.sellPrice}</span>
@@ -398,6 +417,22 @@
                     </div>
                 `;
             });
+        }
+
+        function renderCategoryButtons() {
+            const container = document.getElementById('pos-category-filters');
+            const categories = ['all', ...new Set(products.map(p => p.category || 'সাধারণ'))];
+            
+            container.innerHTML = categories.map(cat => {
+                const label = cat === 'all' ? 'সকল পণ্য' : cat;
+                const activeClass = selectedCategory === cat ? 'bg-emerald-700 text-white font-bold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200';
+                return `<button onclick="filterCategory('${cat}')" class="px-3 py-1 rounded-full whitespace-nowrap transition ${activeClass}">${label}</button>`;
+            }).join('');
+        }
+
+        function filterCategory(cat) {
+            selectedCategory = cat;
+            renderPosProducts();
         }
 
         function handleBarcodeScan(e) {
@@ -461,7 +496,6 @@
             calculateChange();
         }
 
-        // 2. Calculation of Customer Paid, Total Price & Change/Due
         function calculateChange() {
             const subtotal = cart.reduce((sum, i) => sum + (i.sellPrice * i.qty), 0);
             const discount = parseFloat(document.getElementById('cart-discount').value) || 0;
@@ -533,12 +567,13 @@
             document.getElementById('invoice-modal').classList.remove('hidden');
         }
 
-        // Product Management (CRUD & Purchase Barcode Scan)
+        // Product Table & Modal
         function renderProductTable() {
             const tbody = document.getElementById('product-table-body');
             tbody.innerHTML = products.map(p => `
                 <tr class="border-b hover:bg-slate-50">
                     <td class="p-2 font-mono">${p.barcode}</td>
+                    <td class="p-2"><span class="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded">${p.category || 'সাধারণ'}</span></td>
                     <td class="p-2 font-medium">${p.name}</td>
                     <td class="p-2">৳${p.buyPrice}</td>
                     <td class="p-2 text-emerald-600 font-bold">৳${p.sellPrice}</td>
@@ -552,8 +587,10 @@
         }
 
         function openProductModal() {
+            updateCategoryDatalist();
             document.getElementById('edit-product-id').value = '';
             document.getElementById('prod-barcode').value = '';
+            document.getElementById('prod-category').value = '';
             document.getElementById('prod-name').value = '';
             document.getElementById('prod-buy-price').value = '';
             document.getElementById('prod-sell-price').value = '';
@@ -561,9 +598,14 @@
             document.getElementById('product-modal').classList.remove('hidden');
         }
 
+        function updateCategoryDatalist() {
+            const datalist = document.getElementById('category-options');
+            const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+            datalist.innerHTML = categories.map(c => `<option value="${c}">`).join('');
+        }
+
         function closeProductModal() { document.getElementById('product-modal').classList.add('hidden'); }
 
-        // 4. Manual or Barcode Scan Support during Purchase/Product Adding
         function handleModalBarcodeSearch(e) {
             if(e.key === 'Enter') {
                 const code = e.target.value.trim();
@@ -575,6 +617,7 @@
             const existingProduct = products.find(p => p.barcode === code);
             if(existingProduct) {
                 document.getElementById('edit-product-id').value = existingProduct.id;
+                document.getElementById('prod-category').value = existingProduct.category || '';
                 document.getElementById('prod-name').value = existingProduct.name;
                 document.getElementById('prod-buy-price').value = existingProduct.buyPrice;
                 document.getElementById('prod-sell-price').value = existingProduct.sellPrice;
@@ -585,8 +628,10 @@
         function editProduct(id) {
             const p = products.find(i => i.id === id);
             if(p) {
+                updateCategoryDatalist();
                 document.getElementById('edit-product-id').value = p.id;
                 document.getElementById('prod-barcode').value = p.barcode;
+                document.getElementById('prod-category').value = p.category || '';
                 document.getElementById('prod-name').value = p.name;
                 document.getElementById('prod-buy-price').value = p.buyPrice;
                 document.getElementById('prod-sell-price').value = p.sellPrice;
@@ -598,6 +643,7 @@
         function saveProduct() {
             const id = document.getElementById('edit-product-id').value;
             const barcode = document.getElementById('prod-barcode').value.trim();
+            const category = document.getElementById('prod-category').value.trim() || 'সাধারণ';
             const name = document.getElementById('prod-name').value.trim();
             const buyPrice = parseFloat(document.getElementById('prod-buy-price').value) || 0;
             const sellPrice = parseFloat(document.getElementById('prod-sell-price').value) || 0;
@@ -607,9 +653,9 @@
 
             if(id) {
                 const p = products.find(i => i.id === id);
-                Object.assign(p, { barcode, name, buyPrice, sellPrice, stock });
+                Object.assign(p, { barcode, category, name, buyPrice, sellPrice, stock });
             } else {
-                products.push({ id: Date.now().toString(), barcode, name, buyPrice, sellPrice, stock });
+                products.push({ id: Date.now().toString(), barcode, category, name, buyPrice, sellPrice, stock });
             }
             saveData();
             closeProductModal();
@@ -624,7 +670,7 @@
             }
         }
 
-        // Sales History with Read-only Dropdown Details
+        // Sales History
         function renderSalesHistory() {
             const tbody = document.getElementById('sales-table-body');
             tbody.innerHTML = '';
@@ -693,6 +739,7 @@
                             return {
                                 id: Date.now().toString() + index,
                                 barcode: String(normalized['barcode'] || normalized['code'] || '100' + index),
+                                category: String(normalized['category'] || normalized['cat'] || 'সাধারণ'),
                                 name: String(normalized['name'] || normalized['product'] || 'অজানা পণ্য'),
                                 buyPrice: parseFloat(normalized['buyprice'] || normalized['cost'] || 0),
                                 sellPrice: parseFloat(normalized['sellprice'] || normalized['price'] || 0),
